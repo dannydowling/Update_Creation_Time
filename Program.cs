@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Numerics;
-
-public class UpdateFileCreationTime
+﻿public class UpdateFileCreationTime
 {
     public static void Main(string[] args)
     {
