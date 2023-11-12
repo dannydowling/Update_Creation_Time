@@ -2,35 +2,36 @@
 
 public class UpdateFileCreationTime
 {
+  
+
     public static void Main(string[] args)
     {
         string directoryPath = Directory.GetCurrentDirectory();
-        double creationTime;
+        double creationTime = 629514061;
 
         if (args.Length != 0)
-        {  creationTime = Convert.ToDouble(args[0]);  }
-        else
-        {  creationTime = Convert.ToDouble(DateTime.Now);  }
+        { creationTime = Convert.ToDouble(args[0]);  }       
+        var timeStamp = UnixTimeStampToDateTime(creationTime);
 
-        UpdateCreationTime(directoryPath, creationTime);
+        UpdateCreationTime(directoryPath, timeStamp);
         
     }
   
-    public static DateTime UnixTimeStampToDateTime(double unixTimeStamp)
+    public static DateTime UnixTimeStampToDateTime(double creationTime)
     {
         // Unix timestamp is seconds past epoch
         DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-        dateTime = dateTime.AddSeconds(unixTimeStamp).ToLocalTime();
+        dateTime = dateTime.AddSeconds(creationTime).ToLocalTime();
         return dateTime;
     }
 
-    private static void UpdateCreationTime(string directoryPath, double creationTime)
+    private static void UpdateCreationTime(string directoryPath, DateTime timeStamp)
     {
         try
         {
             foreach (string d in Directory.GetDirectories(directoryPath))
             {
-                UpdateCreationTime(d, creationTime);
+                UpdateCreationTime(d, timeStamp);
 
             }
             foreach (var file in Directory.GetFiles(directoryPath))
@@ -39,9 +40,9 @@ public class UpdateFileCreationTime
                 var randomBase = new Random();
 
                 FileInfo fileInfo = new FileInfo(file);
-                fileInfo.CreationTime = UnixTimeStampToDateTime(creationTime);             
-                fileInfo.LastWriteTime = UnixTimeStampToDateTime(creationTime = randomBase.Next(1, 166365));
-                fileInfo.LastAccessTime = UnixTimeStampToDateTime(creationTime + randomBase.Next(166365, 322685));
+                fileInfo.CreationTime = timeStamp;             
+                fileInfo.LastWriteTime = UnixTimeStampToDateTime(randomBase.Next(1, 1337));
+                fileInfo.LastAccessTime = UnixTimeStampToDateTime(randomBase.Next(1337, 2660));
                 Console.WriteLine("Updated time for file: " + fileInfo.FullName);
             }
         }
