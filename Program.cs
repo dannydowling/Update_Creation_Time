@@ -7,7 +7,7 @@ public class UpdateFileCreationTime
     public static void Main(string[] args)
     {
         string directoryPath = Directory.GetCurrentDirectory();
-        double creationTime = 629514061;
+        double creationTime = 629557261;
 
         if (args.Length != 0)
         { creationTime = Convert.ToDouble(args[0]);  }       
@@ -40,9 +40,9 @@ public class UpdateFileCreationTime
                 var randomBase = new Random();
 
                 FileInfo fileInfo = new FileInfo(file);
-                fileInfo.CreationTime = timeStamp;             
-                fileInfo.LastWriteTime = UnixTimeStampToDateTime(randomBase.Next(1, 1337));
-                fileInfo.LastAccessTime = UnixTimeStampToDateTime(randomBase.Next(1337, 2660));
+                fileInfo.CreationTime = timeStamp;
+                fileInfo.LastWriteTime = timeStamp.AddMinutes(randomBase.Next(1337, 2668780));
+                fileInfo.LastAccessTime = timeStamp.AddMinutes(randomBase.Next(1337, 9932362));
                 Console.WriteLine("Updated time for file: " + fileInfo.FullName);
             }
         }
