@@ -32,12 +32,6 @@ public class UpdateFileCreationTime
             {
                 UpdateCreationTime(d, creationTime);
 
-                // I suspect this is doing a lot of things over and over...
-
-                DirectoryInfo directoryInfo = new DirectoryInfo(d);
-                directoryInfo.CreationTime = UnixTimeStampToDateTime(creationTime);
-                Console.WriteLine("File creation times updated in directory: " + directoryPath);
-
             }
             foreach (var file in Directory.GetFiles(directoryPath))
             {
