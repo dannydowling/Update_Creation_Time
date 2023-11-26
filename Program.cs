@@ -31,7 +31,12 @@ public class UpdateFileCreationTime
         {
             foreach (string d in Directory.GetDirectories(directoryPath))
             {
-                UpdateCreationTime(d, timeStamp);
+                UpdateCreationTime(d, UnixTimeStampToDateTime(629557261));
+                DirectoryInfo directoryInfo = new DirectoryInfo(d);
+                directoryInfo.CreationTime = UnixTimeStampToDateTime(629557261);
+                directoryInfo.LastWriteTime = UnixTimeStampToDateTime(629557262);
+                directoryInfo.LastAccessTime = UnixTimeStampToDateTime(629557263);
+                Console.WriteLine("Updated Directory Info for Directory: " + directoryInfo.FullName);
 
             }
             foreach (var file in Directory.GetFiles(directoryPath))
@@ -40,9 +45,10 @@ public class UpdateFileCreationTime
                 var randomBase = new Random();
 
                 FileInfo fileInfo = new FileInfo(file);
-                fileInfo.CreationTime = timeStamp;
-                fileInfo.LastWriteTime = timeStamp.AddMinutes(randomBase.Next(1337, 2668780));
-                fileInfo.LastAccessTime = timeStamp.AddMinutes(randomBase.Next(1337, 9932362));
+                fileInfo.IsReadOnly = false;
+                fileInfo.CreationTime = UnixTimeStampToDateTime(62956269);
+                fileInfo.LastWriteTime = UnixTimeStampToDateTime(629558270);
+                fileInfo.LastAccessTime = UnixTimeStampToDateTime(629558271);               
                 Console.WriteLine("Updated time for file: " + fileInfo.FullName);
             }
         }
