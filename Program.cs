@@ -2,23 +2,41 @@
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("This Utility recursively changes the datetime for access, lastwrite and creation on all files and folders");
-        Console.WriteLine(@"To use it enter a start path and an integer between 0 and 700000000 such as C:\Movies 69696969");
-        Console.WriteLine("It's fairly safe to use. I've made it so that it only writes times after 2001, to stop year 2000 weirdness");
-
         string directoryPath;
         switch (args.Length)
         {
+            // if they don't enter anything. Assume current directory and random datetime
             case 0:
-                Random random = new Random();
-                UpdateCreationTime(Directory.GetCurrentDirectory(), Convert.ToInt32(random.Next(0, 700000001)));
+                Console.WriteLine("This Utility recursively changes the datetime for access, lastwrite and creation on files and folders");
+                Console.WriteLine("First off, enter a path to start from. All subdirectories and files will have their times altered");
+                string path = Console.ReadLine();
+
+                if (path == string.Empty)
+                {
+                   path = Directory.GetCurrentDirectory();
+                }
+
+                Console.WriteLine("Then enter a number between 0 and 700000000. This sets the time in ticks past 2001 until today");
+                string offset = Console.ReadLine();
+
+                if (offset == string.Empty)
+                {
+                    Random random = new Random();
+                    offset = random.Next(0, 700000000).ToString();
+                }
+
+                Directory.SetCurrentDirectory(path);
+                directoryPath = Directory.GetCurrentDirectory();
+                UpdateCreationTime(directoryPath, Convert.ToInt32(offset));
                 break;
 
+                // if there's one argument, assume it's current folder and they're setting the time.
             case 1:
                 directoryPath = Directory.GetCurrentDirectory();
-                UpdateCreationTime(directoryPath, Convert.ToInt32(args[1]));
+                UpdateCreationTime(directoryPath, Convert.ToInt32(args[0]));
                 break;
 
+                //if there's 2 then do what they say
             case 2:
                 Directory.SetCurrentDirectory(args[0]);
                 directoryPath = Directory.GetCurrentDirectory();
