@@ -2,19 +2,13 @@
 
 public class UpdateFileCreationTime
 {
-  
-
-    public static void Main(string[] args)
+    public static void Main(Int32 arg)
     {
         string directoryPath = Directory.GetCurrentDirectory();
-        double creationTime = 629557261;
-
-        if (args.Length != 0)
-        { creationTime = Convert.ToDouble(args[0]);  }       
-        var timeStamp = UnixTimeStampToDateTime(creationTime);
-
-        UpdateCreationTime(directoryPath, timeStamp);
-        
+     if (arg == 0 ) { Random rnd = new Random();
+            arg = rnd.Next(1, 700000001);
+        }
+        UpdateCreationTime(directoryPath, arg);        
     }
   
     public static DateTime UnixTimeStampToDateTime(double creationTime)
@@ -25,38 +19,38 @@ public class UpdateFileCreationTime
         return dateTime;
     }
 
-    private static void UpdateCreationTime(string directoryPath, DateTime timeStamp)
+    private static void UpdateCreationTime(string directoryPath, Int32 arg)
     {
         try
         {
             foreach (string d in Directory.GetDirectories(directoryPath))
             {
-                UpdateCreationTime(d, UnixTimeStampToDateTime(629557261));
+                
                 DirectoryInfo directoryInfo = new DirectoryInfo(d);
-                directoryInfo.CreationTime = UnixTimeStampToDateTime(629557261);
-                directoryInfo.LastWriteTime = UnixTimeStampToDateTime(629557262);
-                directoryInfo.LastAccessTime = UnixTimeStampToDateTime(629557263);
+                directoryInfo.CreationTime = UnixTimeStampToDateTime(777777777 + arg);
+                directoryInfo.LastWriteTime = UnixTimeStampToDateTime(888888888 + arg);
+                directoryInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + arg);
                 Console.WriteLine("Updated Directory Info for Directory: " + directoryInfo.FullName);
+
+                UpdateCreationTime(d, arg);
 
             }
             foreach (var file in Directory.GetFiles(directoryPath))
             {
-                double timeBase = Convert.ToDouble(file.GetHashCode());
-                var randomBase = new Random();
+                double timeBase = Convert.ToDouble(file.GetHashCode());              
 
                 FileInfo fileInfo = new FileInfo(file);
                 fileInfo.IsReadOnly = false;
-                fileInfo.CreationTime = UnixTimeStampToDateTime(62956269);
-                fileInfo.LastWriteTime = UnixTimeStampToDateTime(629558270);
-                fileInfo.LastAccessTime = UnixTimeStampToDateTime(629558271);               
+                fileInfo.CreationTime = UnixTimeStampToDateTime(999999999 + arg);
+                fileInfo.LastWriteTime = UnixTimeStampToDateTime(999999999 + arg);
+                fileInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + arg);               
                 Console.WriteLine("Updated time for file: " + fileInfo.FullName);
             }
         }
         catch (System.Exception e)
         {
-            Console.WriteLine("eeroooorrrr");
-        }
-    
+            Console.WriteLine(e.Message);
+        }    
     }
 }
 
