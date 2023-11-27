@@ -1,4 +1,6 @@
-﻿public class UpdateFileCreationTime
+﻿using System.Text;
+
+public class UpdateFileCreationTime
 {
     public static void Main(string[] args)
     {
@@ -56,21 +58,23 @@
         return dateTime;
     }
 
+    
     private static void UpdateCreationTime(string directoryPath, Int32 offset)
     {
+        int i = 0;
+        string[] paths = Directory.GetDirectories(directoryPath);
         try
         {
-            foreach (string d in Directory.GetDirectories(directoryPath))
-            {
-                DirectoryInfo directoryInfo = new DirectoryInfo(d);
+            for (; i < Directory.GetDirectories(directoryPath).Length; i++)
+            {                
+                DirectoryInfo directoryInfo = new DirectoryInfo(paths[i]);
                 directoryInfo.CreationTime = UnixTimeStampToDateTime(777777777 + offset);
                 directoryInfo.LastWriteTime = UnixTimeStampToDateTime(888888888 + offset);
                 directoryInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
                 Console.WriteLine("Updated Directory Info for Directory: " + directoryInfo.FullName);
-
-                UpdateCreationTime(d, offset);
-
+                UpdateCreationTime(paths[i].ToString(), offset);                             
             }
+
             foreach (var file in Directory.GetFiles(directoryPath))
             {
                 double timeBase = Convert.ToDouble(file.GetHashCode());
@@ -86,6 +90,8 @@
         catch (System.Exception e)
         {
             Console.WriteLine(e.Message);
+            i++;
+            UpdateCreationTime(paths[i].ToString(), offset);
         }
     }
 }
