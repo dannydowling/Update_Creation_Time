@@ -77,14 +77,12 @@ public class UpdateFileCreationTime
 
             foreach (var file in Directory.GetFiles(directoryPath))
             {
-                double timeBase = Convert.ToDouble(file.GetHashCode());
-
                 FileInfo fileInfo = new FileInfo(file);
                 fileInfo.IsReadOnly = false;
                 fileInfo.CreationTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastWriteTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
-                Console.WriteLine("Updated time for file: " + fileInfo.FullName);
+                Console.WriteLine("Updating files in: " + directoryPath + " file count is:" + Directory.GetFiles(directoryPath).Length);
             }
         }
         catch (System.Exception e)
