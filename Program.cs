@@ -63,10 +63,12 @@ public class UpdateFileCreationTime
     private static void UpdateCreationTime(string directoryPath, Int32 offset)
     {
         string[] directoryPaths = Directory.GetDirectories(directoryPath);
+        int i = 0;
+        int k = 0;
         try
         {
-            for (int i = 0; i < Directory.GetDirectories(directoryPath).Length; i++)
-            {                
+            for (; i < Directory.GetDirectories(directoryPath).Length; i++)
+            {
                 DirectoryInfo directoryInfo = new DirectoryInfo(directoryPaths[i]);
                 if (directoryInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
                 { i++; }
@@ -80,7 +82,7 @@ public class UpdateFileCreationTime
 
             string[] filePaths = Directory.GetFiles(directoryPath);
 
-            for (int k = 0; k < filePaths.Length; k++)
+            for (; k < filePaths.Length; k++)
             {
                 FileInfo fileInfo = new FileInfo(filePaths[k]);
                 if (fileInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
@@ -89,11 +91,19 @@ public class UpdateFileCreationTime
                 fileInfo.LastWriteTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
             }
-        }       
-        catch(System.Exception f)
-        {
-            Console.WriteLine(f.Message);
         }
+        catch (System.AccessViolationException f)
+        {
+            k++;
+            Console.WriteLine(f.Message);
+            UpdateCreationTime(directoryPaths[i].ToString(), offset);
+        }
+        catch (System.Exception e)
+        {
+            i++;
+            Console.WriteLine(e.Message);
+            UpdateCreationTime(directoryPaths[i].ToString(), offset);
+        } 
     }
 }
 
