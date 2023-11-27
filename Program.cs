@@ -62,34 +62,37 @@ public class UpdateFileCreationTime
     
     private static void UpdateCreationTime(string directoryPath, Int32 offset)
     {
-        int i = 0;
-        string[] paths = Directory.GetDirectories(directoryPath);
+        string[] directoryPaths = Directory.GetDirectories(directoryPath);
         try
         {
-            for (; i < Directory.GetDirectories(directoryPath).Length; i++)
+            for (int i = 0; i < Directory.GetDirectories(directoryPath).Length; i++)
             {                
-                DirectoryInfo directoryInfo = new DirectoryInfo(paths[i]);
+                DirectoryInfo directoryInfo = new DirectoryInfo(directoryPaths[i]);
+                if (directoryInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
+                { i++; }
                 directoryInfo.CreationTime = UnixTimeStampToDateTime(777777777 + offset);
                 directoryInfo.LastWriteTime = UnixTimeStampToDateTime(888888888 + offset);
                 directoryInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
-                UpdateCreationTime(paths[i].ToString(), offset);
+
+                UpdateCreationTime(directoryPaths[i].ToString(), offset);
                 Console.WriteLine("Updating files in: " + directoryPath + " file count is:" + (Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.TopDirectoryOnly).Length));
             }
 
-            foreach (var file in Directory.GetFiles(directoryPath))
+            string[] filePaths = Directory.GetFiles(directoryPath);
+
+            for (int k = 0; k < filePaths.Length; k++)
             {
-                FileInfo fileInfo = new FileInfo(file);
+                FileInfo fileInfo = new FileInfo(filePaths[k]);
+                if (fileInfo.Attributes.HasFlag(FileAttributes.ReadOnly))
+                { k++; }
                 fileInfo.CreationTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastWriteTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
-               
             }
-        }
-        catch (System.Exception e)
+        }       
+        catch(System.Exception f)
         {
-            Console.WriteLine(e.Message);
-            i++;
-            UpdateCreationTime(paths[i].ToString(), offset);
+            Console.WriteLine(f.Message);
         }
     }
 }
