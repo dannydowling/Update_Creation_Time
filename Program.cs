@@ -79,7 +79,6 @@ public class UpdateFileCreationTime
             foreach (var file in Directory.GetFiles(directoryPath))
             {
                 FileInfo fileInfo = new FileInfo(file);
-                fileInfo.IsReadOnly = false;
                 fileInfo.CreationTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastWriteTime = UnixTimeStampToDateTime(999999999 + offset);
                 fileInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
