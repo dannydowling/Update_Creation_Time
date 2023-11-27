@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 
 public class UpdateFileCreationTime
 {
@@ -71,9 +72,8 @@ public class UpdateFileCreationTime
                 directoryInfo.CreationTime = UnixTimeStampToDateTime(777777777 + offset);
                 directoryInfo.LastWriteTime = UnixTimeStampToDateTime(888888888 + offset);
                 directoryInfo.LastAccessTime = UnixTimeStampToDateTime(999999999 + offset);
-                Console.WriteLine("Updated Directory Info for Directory: " + directoryInfo.Name);
                 UpdateCreationTime(paths[i].ToString(), offset);
-                Console.WriteLine("Updating files in: " + directoryPath + " file count is:" + Directory.GetFiles(directoryPath).Length);
+                Console.WriteLine("Updating files in: " + directoryPath + " file count is:" + (Directory.GetFiles(directoryInfo.FullName, "*.*", SearchOption.TopDirectoryOnly).Length));
             }
 
             foreach (var file in Directory.GetFiles(directoryPath))
